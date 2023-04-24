@@ -51,17 +51,17 @@ def save_lineplot(data, x_col, y_col, output_filename):
     plt.close()
 
 def plot_radar(dataset):
-    # Find player's location
-    # player_1 = 'Cristiano Ronaldo'
-    # row_1 = dataset.loc[dataset['Name'] == player_1].index[0]
-    player_2 = 'L. Messi'
-    row_2 = dataset.loc[dataset['Name'] == player_2].index[0]
-
-    labels = ['Overall', 'Potential','Age', 'Value', 'Wage']
-    dataset = dataset[labels]
+    labels = ['Overall', 'Special', 'Potential', 'Age', 'Value', 'Wage']
+    # dataset = dataset[labels]
     numb = len(labels)
-    # PLAYER #1 on list
-    values = list(dataset.loc[row_2])
+    # PLAYER BY NAME
+    player_1 = 'Cristiano Ronaldo'
+    values = list(dataset.loc[dataset['Name'] == player_1][labels])
+    # player_2 = 'L. Messi'
+    # values = dataset.loc[dataset['Name'] == player_2][labels])
+    # PLAYER BY LOCATION
+    # values = list(dataset.loc[1000])
+
     angles = np.linspace(0, 2 * np.pi, numb, endpoint=False).tolist()
 
     # Plot is a circle, we need the loop and append the start to the end
@@ -73,9 +73,6 @@ def plot_radar(dataset):
     # Fix axis to go in the right order and start at 12 o'clock
     ax.set_theta_offset(np.pi / 2)
     ax.set_theta_direction(-1)
-
-    # Draw axis line for each angle and label
-    ax.set_thetagrids(np.degrees(angles), labels)
 
     # Draw outline for data
     ax.plot(angles, values, color='blue', linewidth=1)
