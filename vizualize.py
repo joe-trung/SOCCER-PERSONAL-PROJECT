@@ -2,8 +2,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn import preprocessing
 import os
+import numpy as np
 
-from data_transform import fifa_data
+from data_transform import fifa_data, preprocess_fifa_data
 
 
 def plot_top_n_players(data, column, n=10):
@@ -49,6 +50,42 @@ def save_lineplot(data, x_col, y_col, output_filename):
     plt.savefig(f'Plot/{output_filename}.png')
     plt.close()
 
+def plot_radar(dataset):
+    # Find player's location
+    # player_1 = 'Cristiano Ronaldo'
+    # row_1 = dataset.loc[dataset['Name'] == player_1].index[0]
+    player_2 = 'L. Messi'
+    row_2 = dataset.loc[dataset['Name'] == player_2].index[0]
+
+    labels = ['Overall', 'Potential','Age', 'Value', 'Wage']
+    dataset = dataset[labels]
+    numb = len(labels)
+    # PLAYER #1 on list
+    values = list(dataset.loc[row_2])
+    angles = np.linspace(0, 2 * np.pi, numb, endpoint=False).tolist()
+
+    # Plot is a circle, we need the loop and append the start to the end
+    values += values[:1]
+    angles += angles[:1]
+
+    fig, ax = plt.subplots(figsize=(10, 10), subplot_kw=dict(polar=True))
+
+    # Fix axis to go in the right order and start at 12 o'clock
+    ax.set_theta_offset(np.pi / 2)
+    ax.set_theta_direction(-1)
+
+    # Draw axis line for each angle and label
+    ax.set_thetagrids(np.degrees(angles), labels)
+
+    # Draw outline for data
+    ax.plot(angles, values, color='blue', linewidth=1)
+
+    ax.fill(angles, values, color='red', alpha=0.25)
+    ax.set_title('Radar Plot')
+
+    # Save plot to file
+    fig.savefig("Plot/radar_plot.png")
+
 
 if __name__ == '__main__':
     # Call the method to plot the top 10 players by Overall rating
@@ -59,13 +96,15 @@ if __name__ == '__main__':
 
     # Sort by Overall and select the top 50 players
     sort50_df23 = df23.sort_values(by='Overall', ascending=False).head(50)
+
     # Call the function to create the plot and save it to a file
     save_lineplot(sort50_df23, 'Age', 'Overall', 'top50_age_overall')
     save_lineplot(sort50_df23, 'Value', 'Age', 'top50_value_age')
     save_lineplot(sort50_df23,  'Value', 'Overall', 'top50_value_overall')
     save_lineplot(sort50_df23,  'Value', 'Wage', 'top50_value_wage')
 
-
+    # RADAR PLOT
+    plot_radar(preprocess_fifa_data(fifa_data))
 
     print('Successfully exported visualized files in to Plot folder')
 
