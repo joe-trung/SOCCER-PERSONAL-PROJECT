@@ -1,7 +1,11 @@
 import json
 import http.client
+import os
 
 
+
+# THIS WAS BUILT TO COLLECT DATA FROM API, BUT LIMITED REQUEST EVERYDAY MAKE IT IMPOSSIBLE.
+#  DATASET WAS COLLECTED FROM KAGGLE, FIFA...
 def get_soccer_data(api_key):
     conn = http.client.HTTPSConnection("v3.football.api-sports.io")
 
@@ -27,5 +31,7 @@ def get_soccer_data(api_key):
 
 
 if __name__ == '__main__':
+    # THIS KEY IS NOT IMPORTANT
+    # api_key = os.environ.get('API_KEY')
     api_key = "9b86b389ee9d0cf5104df2e31e703a22"
     get_soccer_data(api_key)

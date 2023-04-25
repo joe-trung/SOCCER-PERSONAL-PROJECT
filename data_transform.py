@@ -66,6 +66,7 @@ def preprocess_dataframe(df):
 
 
 def preprocess_fifa_data(data):
+    # Merge all in one
     merge = []
     for i in range(2018, 2024):
         data['Y' + str(i)]["Year"] = str(i)
@@ -76,11 +77,9 @@ def preprocess_fifa_data(data):
 
 
 if __name__ == "__main__":
-    # Define the columns to keep
+    # Columns to keep
     keep_cols = ['Name', 'Age', 'Overall', 'Potential', 'Club', 'Value', 'Wage', 'Special', 'Preferred Foot',
                  'Work Rate', 'Height', 'Weight', 'Release Clause']
-
-    # Keep the specified columns from the FIFA data
     fifa_data = keep_columns(fifa_data, keep_cols)
 
     # Select and process every year's data
@@ -97,6 +96,8 @@ if __name__ == "__main__":
 
     for df in (df18, df19, df20, df21, df22, df23):
         preprocess_dataframe(df)
+
+    # There should be a better way
     fifa_data['Y2023'] = df23
     fifa_data['Y2022'] = df22
     fifa_data['Y2021'] = df21
@@ -107,7 +108,7 @@ if __name__ == "__main__":
     # Merge all processed dataframe into one
     preprocessed_data = preprocess_fifa_data(fifa_data)
 
-    # Save the processed data to a CSV file in the processed_data folder
+    # SAVE TO LOCAL MACHINE, can be used if don't want to use S3
     # if not os.path.exists('processed_data'):
     #     os.makedirs('processed_data')
     # preprocessed_data.to_csv('processed_data/fifa_data.csv')
