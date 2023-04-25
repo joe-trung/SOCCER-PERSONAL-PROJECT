@@ -1,3 +1,6 @@
+from io import BytesIO
+
+import boto3
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn import preprocessing
@@ -13,12 +16,29 @@ def plot_top_n_players(data, column, n=10):
     sns.set_theme(style='whitegrid')
     ax = sns.barplot(x='Name', y=column, data=sort_df)
 
-    # Create the Plot folder if it doesn't exist
-    if not os.path.exists('Plot'):
-        os.mkdir('Plot')
+    # # Create the Plot folder if it doesn't exist
+    # if not os.path.exists('Plot'):
+    #     os.mkdir('Plot')
+    #
+    # # Save the plot as a PNG file in the Plot folder
+    # plt.savefig(f'Plot/{column}_barplot{n}.png')
+    # plt.close()
 
-    # Save the plot as a PNG file in the Plot folder
-    plt.savefig(f'Plot/{column}_barplot{n}.png')
+    # Connect to S3
+    s3 = boto3.resource('s3')
+
+    # Save the plot as a PNG file in memory
+    png_buffer = BytesIO()
+    plt.savefig(png_buffer, format='png')
+    png_buffer.seek(0)
+
+    # Upload the plot to S3 as an object
+    bucket_name = 'soccerpassionproject'
+    object_key = f'plot/{column}_barplot{n}.png'
+    s3.Bucket(bucket_name).put_object(Key=object_key, Body=png_buffer)
+    s3.ObjectAcl(bucket_name, object_key).put(ACL='public-read')
+
+    # Close the plot to free up memory
     plt.close()
 
 
@@ -37,7 +57,24 @@ def plot_boxplot(data, column):
     ax = sns.boxplot(x=data[column])
 
     # Save the plot as a PNG file in the Plot folder
-    plt.savefig(f'Plot/{column}_boxplot.png')
+    # plt.savefig(f'Plot/{column}_boxplot.png')
+    # plt.close()
+
+    # Connect to S3
+    s3 = boto3.resource('s3')
+
+    # Save the plot as a PNG file in memory
+    png_buffer = BytesIO()
+    plt.savefig(png_buffer, format='png')
+    png_buffer.seek(0)
+
+    # Upload the plot to S3 as an object
+    bucket_name = 'soccerpassionproject'
+    object_key = f'plot/{column}_boxplot.png'
+    s3.Bucket(bucket_name).put_object(Key=object_key, Body=png_buffer)
+    s3.ObjectAcl(bucket_name, object_key).put(ACL='public-read')
+
+    # Close the plot to free up memory
     plt.close()
 
 
@@ -47,7 +84,24 @@ def save_lineplot(data, x_col, y_col, output_filename):
     ax = sns.lineplot(data=data, x=x_col, y=y_col)
 
     # Save the plot as a PNG file in the Plot folder
-    plt.savefig(f'Plot/{output_filename}.png')
+    # plt.savefig(f'Plot/{output_filename}.png')
+    # plt.close()
+
+    # Connect to S3
+    s3 = boto3.resource('s3')
+
+    # Save the plot as a PNG file in memory
+    png_buffer = BytesIO()
+    plt.savefig(png_buffer, format='png')
+    png_buffer.seek(0)
+
+    # Upload the plot to S3 as an object
+    bucket_name = 'soccerpassionproject'
+    object_key = f'plot/{output_filename}.png'
+    s3.Bucket(bucket_name).put_object(Key=object_key, Body=png_buffer)
+    s3.ObjectAcl(bucket_name, object_key).put(ACL='public-read')
+
+    # Close the plot to free up memory
     plt.close()
 
 def plot_radar(dataset):
@@ -81,7 +135,24 @@ def plot_radar(dataset):
     ax.set_title('Radar Plot')
 
     # Save plot to file
-    fig.savefig("Plot/radar_plot.png")
+    # fig.savefig("Plot/radar_plot.png")
+
+    # Connect to S3
+    s3 = boto3.resource('s3')
+
+    # Save the plot as a PNG file in memory
+    png_buffer = BytesIO()
+    fig.savefig(png_buffer, format='png')
+    png_buffer.seek(0)
+
+    # Upload the plot to S3 as an object
+    bucket_name = 'soccerpassionproject'
+    object_key = f'plot/radar_plot.png'
+    s3.Bucket(bucket_name).put_object(Key=object_key, Body=png_buffer)
+    s3.ObjectAcl(bucket_name, object_key).put(ACL='public-read')
+
+    # Close the plot to free up memory
+    plt.close()
 
 
 if __name__ == '__main__':

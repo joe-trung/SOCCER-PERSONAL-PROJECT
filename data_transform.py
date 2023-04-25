@@ -1,11 +1,14 @@
 import os
+
+import boto3
 import pandas as pd
 
 
 def load_fifa_data():
     dataset = {}
     for i in range(18, 24):
-        dataset["Y20" + str(i)] = pd.read_csv('raw_data/FIFA' + str(i) + '_official_data.csv')
+        # dataset["Y20" + str(i)] = pd.read_csv('raw_data/FIFA' + str(i) + '_official_data.csv')
+        dataset["Y20" + str(i)] = pd.read_csv('https://soccerpassionproject.s3.amazonaws.com/raw_data/FIFA'+str(i)+'_official_data.csv')
     return dataset
 
 
@@ -98,9 +101,18 @@ if __name__ == "__main__":
     preprocessed_data = preprocess_fifa_data(fifa_data)
 
     # Save the processed data to a CSV file in the processed_data folder
-    if not os.path.exists('processed_data'):
-        os.makedirs('processed_data')
-    preprocessed_data.to_csv('processed_data/fifa_data.csv')
+    # if not os.path.exists('processed_data'):
+    #     os.makedirs('processed_data')
+    # preprocessed_data.to_csv('processed_data/fifa_data.csv')
+
+    # Save the processed data to an S3 bucket
+    s3 = boto3.resource('s3')
+    bucket_name = 'soccerpassionproject'
+    # Convert the DataFrame to CSV format
+    csv_buffer = preprocessed_data.to_csv(index=False).encode()
+    # Upload the CSV data to S3
+    s3.Object(bucket_name, 'processed_data/fifa_data.csv').put(Body=csv_buffer)
+    s3.ObjectAcl(bucket_name, 'processed_data/fifa_data.csv').put(ACL='public-read')
 
     # Print something to confirm Success
     print("Exported final dataset with shape of:" + str(preprocessed_data.shape))
