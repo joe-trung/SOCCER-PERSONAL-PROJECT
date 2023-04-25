@@ -1,5 +1,6 @@
 from pyspark.sql import SparkSession
 from pyspark.ml.regression import LinearRegression
+import pyspark.sql.functions as f
 
 spark = SparkSession.builder.appName('PassionProject').getOrCreate()
 df = spark.read.csv('processed_data/fifa_data.csv', header = True, inferSchema=True)
@@ -19,6 +20,9 @@ def find_missing_values_columns(df):
                  "----------------------------")
 
 
+df1 = df.withColumn('Value in Mil', f.regexp_replace('Value', '[€,M]', '').cast('double'))
+df2 = df.withColumn('Wage in K', f.regexp_replace('Wage', '[€,K]', '').cast('double'))
+df3 = df.withColumn('Release Clause in Mil', f.regexp_replace('Release Clause', '[€,M]', '').cast('double'))
 
 if __name__ == '__main__':
     find_missing_values_columns(df)

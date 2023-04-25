@@ -14,13 +14,6 @@ def load_fifa_data():
 
 # Load the FIFA data
 fifa_data = load_fifa_data()
-# Select and process every year's data
-df23 = fifa_data['Y2023']
-df22 = fifa_data['Y2022']
-df21 = fifa_data['Y2021']
-df20 = fifa_data['Y2020']
-df19 = fifa_data['Y2019']
-df18 = fifa_data['Y2018']
 
 
 def keep_columns(dataset, keep_cols):
@@ -90,12 +83,26 @@ if __name__ == "__main__":
     # Keep the specified columns from the FIFA data
     fifa_data = keep_columns(fifa_data, keep_cols)
 
+    # Select and process every year's data
+    df23 = fifa_data['Y2023']
+    df22 = fifa_data['Y2022']
+    df21 = fifa_data['Y2021']
+    df20 = fifa_data['Y2020']
+    df19 = fifa_data['Y2019']
+    df18 = fifa_data['Y2018']
+
     # Print the shape of each DataFrame to verify that the columns were dropped
     for key in fifa_data:
         print(key, fifa_data[key].shape)
 
     for df in (df18, df19, df20, df21, df22, df23):
         preprocess_dataframe(df)
+    fifa_data['Y2023'] = df23
+    fifa_data['Y2022'] = df22
+    fifa_data['Y2021'] = df21
+    fifa_data['Y2020'] = df20
+    fifa_data['Y2019'] = df19
+    fifa_data['Y2018'] = df18
 
     # Merge all processed dataframe into one
     preprocessed_data = preprocess_fifa_data(fifa_data)
