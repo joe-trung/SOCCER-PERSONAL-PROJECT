@@ -4,10 +4,10 @@ import pyspark.sql.functions as f
 from pyspark.ml.feature import StringIndexer, VectorAssembler
 import seaborn as sns
 import boto3
-from io import BytesIO
-from pyspark.ml.regression import LinearRegression
+import pandas as pd
+from io import BytesIO, StringIO
+from pyspark.ml.regression import LinearRegression, DecisionTreeRegressor, RandomForestRegressor
 from pyspark.ml.evaluation import RegressionEvaluator
-
 
 spark = SparkSession.builder.appName('PassionProject').getOrCreate()
 df = spark.read.csv('processed_data/fifa_data.csv', header=True, inferSchema=True)
@@ -28,11 +28,11 @@ def find_missing_values_columns(df):
                     "----------------------------")
 
 
-def make_currency_numeric(dataf):
-    dataf = dataf.withColumn('Value in Mil', f.regexp_replace('Value', '[€,M]', '').cast('double'))
-    dataf = dataf.withColumn('Wage in K', f.regexp_replace('Wage', '[€,K]', '').cast('double'))
-    dataf = dataf.withColumn('Release Clause in Mil', f.regexp_replace('Release Clause', '[€,M]', '').cast('double'))
-    return dataf
+def make_currency_numeric(df):
+    df1 = df.withColumn('Value in Mil', f.regexp_replace('Value', '[€,M]', '').cast('double'))
+    df2 = df1.withColumn('Wage in K', f.regexp_replace('Wage', '[€,K]', '').cast('double'))
+    df3 = df2.withColumn('Release Clause in Mil', f.regexp_replace('Release Clause', '[€,M]', '').cast('double'))
+    return df3
 
 
 def indexing_string(df, column):
@@ -110,9 +110,9 @@ def create_correlation_scatter(panda_df, column1, column2):
     print('Exported correlation scatter')
 
 
-def big_histogram(pandaf):
+def big_histogram(df):
     # Get number of rows and columns in DataFrame
-    n_rows, n_cols = pandaf.shape
+    n_rows, n_cols = df.shape
 
     # Determine number of subplot rows and columns
     n_subplot_cols = 4
@@ -177,7 +177,72 @@ def train_linear_regression_model(df):
     r2 = evaluator.evaluate(predictions)
 
     # Return the trained model and R2 score
-    return (lrModel, r2)
+    return r2
+
+
+def decision_tree_regression(df):
+    # Define the feature vector using VectorAssembler
+    assembler = VectorAssembler(inputCols=["features"], outputCol="features_vec")
+    data = assembler.transform(df)
+
+    # Split the data into training and testing sets
+    (train_data, test_data) = data.randomSplit([0.8, 0.2], seed=42)
+
+    # Define the Decision Tree model
+    dt = DecisionTreeRegressor(featuresCol="features_vec", labelCol="label")
+
+    # Train the model using the training data
+    model = dt.fit(train_data)
+
+    # Make predictions using the testing data
+    predictions = model.transform(test_data)
+
+    # Evaluate the model using R-squared
+    evaluator = RegressionEvaluator(metricName="r2")
+    r2 = evaluator.evaluate(predictions)
+
+    return r2
+
+
+def random_forest_regression(df):
+    # Define the feature vector using VectorAssembler
+    assembler = VectorAssembler(inputCols=["features"], outputCol="features_vec")
+    data = assembler.transform(df)
+
+    # Split the data into training and testing sets
+    (train_data, test_data) = data.randomSplit([0.8, 0.2], seed=42)
+
+    # Define the Random Forest model
+    rf = RandomForestRegressor(featuresCol="features_vec", labelCol="label", numTrees=100, seed=42)
+
+    # Train the model using the training data
+    model = rf.fit(train_data)
+
+    # Make predictions using the testing data
+    predictions = model.transform(test_data)
+
+    # Evaluate the model using R-squared
+    evaluator = RegressionEvaluator(metricName="r2")
+    r2 = evaluator.evaluate(predictions)
+
+    return r2
+
+
+def save_data_to_s3(r2, r3, r4):
+    # Create a Pandas DataFrame to hold the R-squared scores
+    data = {'Model': ['Linear Regression', 'Decision Tree Regression', 'Random Forest Regression'],
+            'R-squared Score': [r2, r3, r4]}
+    df = pd.DataFrame(data)
+
+    # Convert the Pandas DataFrame to a CSV string
+    csv_buffer = StringIO()
+    df.to_csv(csv_buffer, index=False)
+    csv_string = csv_buffer.getvalue()
+
+    # Upload the CSV string to S3
+    bucket_name = 'soccerpassionproject'
+    key = 'ml_models/r_square_score.csv'
+    s3.put_object(Bucket=bucket_name, Key=key, Body=csv_string,ACL='public-read')
 
 
 if __name__ == '__main__':
@@ -185,20 +250,21 @@ if __name__ == '__main__':
     find_missing_values_columns(df)
 
     # Change currency values to float
-    df1 = make_currency_numeric(df)
+    df = make_currency_numeric(df)
 
     # Make indexing for preferred foot.
-    df2 = indexing_string(df1, "Preferred Foot")
+    df = indexing_string(df, "Preferred Foot")
 
     # Fill in null for Release Clause and Club
-    df3 = fill_in_null(df2)
+    df = fill_in_null(df)
+    df = df.na.drop(how='any')
 
     # Select columns
-    df4 = df3.select('Age', 'Overall', 'Potential', 'Special', 'BMI', 'Year',
+    df = df.select('Age', 'Overall', 'Potential', 'Special', 'BMI', 'Year',
                      'Wage in K', 'Release Clause in Mil', 'Preferred Foot_', 'Value in Mil')
 
     # Make more heatmap, histogram, and scatter plots
-    pdf = convert_spark_df_to_pandas_df(df4)
+    pdf = convert_spark_df_to_pandas_df(df)
     create_heatmap_plot(pdf)
     create_correlation_scatter(pdf, 'Value in Mil', 'Age')
     create_correlation_scatter(pdf, 'Value in Mil', 'Overall')
@@ -209,11 +275,22 @@ if __name__ == '__main__':
     create_correlation_scatter(pdf, 'Value in Mil', 'Release Clause in Mil')
     big_histogram(pdf)
 
+
     # Vector assembler
     input_cols = ['Age', 'Overall', 'Potential', 'Special', 'BMI', 'Year',
                   'Wage in K', 'Release Clause in Mil', 'Preferred Foot_']
     output_col = 'features'
-    feature_df = vector_assembler(df4, input_cols, output_col)
+    feature_df = vector_assembler(df, input_cols, output_col)
     new_df = feature_df.select('features', "Value in Mil").withColumnRenamed("Value in Mil", 'label')
 
-    linear_regression(new_df)
+    r2_linear = train_linear_regression_model(new_df)
+    print("R2 Score from linear regression: ", r2_linear)
+
+    r2_decision = decision_tree_regression(new_df)
+    print("R2 Score from decision tree regression: ", r2_decision)
+
+    r2_forest = random_forest_regression(new_df)
+    print("R2 Score from random forest regression: ", r2_forest)
+
+    s3 = boto3.client('s3')
+    save_data_to_s3(r2_linear, r2_decision, r2_forest)
