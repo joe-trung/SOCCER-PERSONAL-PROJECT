@@ -1,11 +1,12 @@
 from io import BytesIO
-
 import boto3
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn import preprocessing
-import os
 import numpy as np
+# SAVE THESE INCASE NEED TO SAVE FILES LOCALLY
+# from sklearn import preprocessing
+# import os
+
 
 from data_transform import fifa_data, preprocess_fifa_data
 
@@ -16,7 +17,8 @@ def plot_top_n_players(data, column, n=10):
     sns.set_theme(style='whitegrid')
     ax = sns.barplot(x='Name', y=column, data=sort_df)
 
-    # # Create the Plot folder if it doesn't exist
+    # KEEP THESE CODE INCASE SWITCHING BACK TO LOCAL DRIVE
+    # Create the Plot folder if it doesn't exist
     # if not os.path.exists('Plot'):
     #     os.mkdir('Plot')
     #
@@ -42,6 +44,7 @@ def plot_top_n_players(data, column, n=10):
     plt.close()
 
 
+# Not many years, do this better than loop
 # Select the 2023 data
 df23 = fifa_data['Y2023']
 df22 = fifa_data['Y2022']
@@ -111,6 +114,8 @@ def plot_radar(dataset):
     # PLAYER BY NAME
     player_1 = 'Cristiano Ronaldo'
     values = list(dataset.loc[dataset['Name'] == player_1][labels])
+
+    # CAN PUT DIFFERENT NAMEs TO RETRIEVE DIFFERENT RECORDS
     # player_2 = 'L. Messi'
     # values = dataset.loc[dataset['Name'] == player_2][labels])
     # PLAYER BY LOCATION
@@ -156,10 +161,10 @@ def plot_radar(dataset):
 
 
 if __name__ == '__main__':
-    # Call the method to plot the top 10 players by Overall rating
+    # Top 10 players by Overall rating
     plot_top_n_players(df23, 'Overall', 10)
 
-    # Call the method to plot a box plot of the Overall column
+    # Box plot of the Overall column
     plot_boxplot(df23, 'Overall')
 
     # Sort by Overall and select the top 50 players

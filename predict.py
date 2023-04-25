@@ -21,11 +21,12 @@ def find_missing_values_columns(df):
         if v_count < nrow:
             missing_rows = nrow - v_count
             missing_percentage = (1 - v_count / nrow) * 100
-            print("Total observations: " + str(nrow) + "\n"
-                    "Total observations of " + v + ": " + str(v_count) + "\n"
-                    "Total missing rows is: " + str(missing_rows) + "\n"
-                    "Percentage of missing values: " + str(missing_percentage) + "%" + "\n"
-                    "----------------------------")
+            print("Total observations: " + str(nrow) +
+                  "\nTotal observations of " + v + ": " + str(v_count) +
+                  "\nTotal missing rows is: " + str(missing_rows) +
+                  "\nPercentage of missing values: "
+                  + str(missing_percentage) + "%" +
+                  "\n----------------------------")
 
 
 def make_currency_numeric(df):
@@ -52,7 +53,6 @@ def fill_in_null(dataf):
     return dataf
 
 
-# Convert PySpark DataFrame to Pandas DataFrame
 def convert_spark_df_to_pandas_df(spark_df):
     return spark_df.toPandas()
 
@@ -172,8 +172,7 @@ def train_linear_regression_model(df):
 
     # Evaluate the model using the R2 metric
     from pyspark.ml.evaluation import RegressionEvaluator
-    evaluator = RegressionEvaluator(predictionCol="prediction", \
-                     labelCol="label", metricName="r2")
+    evaluator = RegressionEvaluator(predictionCol="prediction", labelCol="label", metricName="r2")
     r2 = evaluator.evaluate(predictions)
 
     # Return the trained model and R2 score
@@ -242,7 +241,7 @@ def save_data_to_s3(r2, r3, r4):
     # Upload the CSV string to S3
     bucket_name = 'soccerpassionproject'
     key = 'ml_models/r_square_score.csv'
-    s3.put_object(Bucket=bucket_name, Key=key, Body=csv_string,ACL='public-read')
+    s3.put_object(Bucket=bucket_name, Key=key, Body=csv_string, ACL='public-read')
 
 
 if __name__ == '__main__':
@@ -261,7 +260,7 @@ if __name__ == '__main__':
 
     # Select columns
     df = df.select('Age', 'Overall', 'Potential', 'Special', 'BMI', 'Year',
-                     'Wage in K', 'Release Clause in Mil', 'Preferred Foot_', 'Value in Mil')
+                   'Wage in K', 'Release Clause in Mil', 'Preferred Foot_', 'Value in Mil')
 
     # Make more heatmap, histogram, and scatter plots
     pdf = convert_spark_df_to_pandas_df(df)
@@ -274,7 +273,6 @@ if __name__ == '__main__':
     create_correlation_scatter(pdf, 'Value in Mil', 'Wage in K')
     create_correlation_scatter(pdf, 'Value in Mil', 'Release Clause in Mil')
     big_histogram(pdf)
-
 
     # Vector assembler
     input_cols = ['Age', 'Overall', 'Potential', 'Special', 'BMI', 'Year',
