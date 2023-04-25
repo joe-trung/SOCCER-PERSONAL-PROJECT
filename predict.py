@@ -1,12 +1,13 @@
 from matplotlib import pyplot as plt
 from pyspark.sql import SparkSession
-from pyspark.ml.regression import LinearRegression
 import pyspark.sql.functions as f
-from pyspark.ml.feature import StringIndexer
+from pyspark.ml.feature import StringIndexer, VectorAssembler
 import seaborn as sns
-import pandas as pd
 import boto3
 from io import BytesIO
+from pyspark.ml.regression import LinearRegression
+from pyspark.ml.evaluation import RegressionEvaluator
+
 
 spark = SparkSession.builder.appName('PassionProject').getOrCreate()
 df = spark.read.csv('processed_data/fifa_data.csv', header=True, inferSchema=True)
@@ -109,6 +110,76 @@ def create_correlation_scatter(panda_df, column1, column2):
     print('Exported correlation scatter')
 
 
+def big_histogram(pandaf):
+    # Get number of rows and columns in DataFrame
+    n_rows, n_cols = pandaf.shape
+
+    # Determine number of subplot rows and columns
+    n_subplot_cols = 4
+    n_subplot_rows = (n_cols + n_subplot_cols - 1) // n_subplot_cols
+
+    # Create figure and axes
+    fig, axs = plt.subplots(n_subplot_rows, n_subplot_cols, figsize=(20, 10))
+
+    # Plot histograms for each column
+    for i, col_name in enumerate(df.columns):
+        row_idx = i // n_subplot_cols
+        col_idx = i % n_subplot_cols
+        ax = axs[row_idx, col_idx]
+        ax.hist(df[col_name], bins=20)
+        ax.set_title(col_name)
+
+    # Adjust spacing between subplots
+    fig.tight_layout()
+
+    # Connect to S3
+    s3 = boto3.resource('s3')
+
+    # Save the plot as a PNG file in memory
+    png_buffer = BytesIO()
+    plt.savefig(png_buffer, format='png')
+    png_buffer.seek(0)
+
+    # Upload the plot to S3 as an object
+    bucket_name = 'soccerpassionproject'
+    object_key = f'plot/bighistogram.png'
+    s3.Bucket(bucket_name).put_object(Key=object_key, Body=png_buffer)
+    s3.ObjectAcl(bucket_name, object_key).put(ACL='public-read')
+
+    # Close the plot to free up memory
+    plt.close()
+    print('Exported big histogram')
+
+
+def vector_assembler(dataf, input_cols, output_col):
+    assembler = VectorAssembler(inputCols=input_cols, outputCol=output_col)
+    output_df = assembler.transform(dataf)
+    return output_df
+
+
+def train_linear_regression_model(df):
+    # Split the input DataFrame into training and testing sets
+    (trainingData, testData) = df.randomSplit([0.8, 0.2])
+
+    # Create a LinearRegression object with the desired parameters
+    lr = LinearRegression(maxIter=10)
+
+    # Train the model on the training data
+    lrModel = lr.fit(trainingData)
+
+    # Use the model to make predictions on the test data
+    predictions = lrModel.transform(testData)
+
+    # Evaluate the model using the R2 metric
+    from pyspark.ml.evaluation import RegressionEvaluator
+    evaluator = RegressionEvaluator(predictionCol="prediction", \
+                     labelCol="label", metricName="r2")
+    r2 = evaluator.evaluate(predictions)
+
+    # Return the trained model and R2 score
+    return (lrModel, r2)
+
+
 if __name__ == '__main__':
     # Find missing values
     find_missing_values_columns(df)
@@ -126,6 +197,7 @@ if __name__ == '__main__':
     df4 = df3.select('Age', 'Overall', 'Potential', 'Special', 'BMI', 'Year',
                      'Wage in K', 'Release Clause in Mil', 'Preferred Foot_', 'Value in Mil')
 
+    # Make more heatmap, histogram, and scatter plots
     pdf = convert_spark_df_to_pandas_df(df4)
     create_heatmap_plot(pdf)
     create_correlation_scatter(pdf, 'Value in Mil', 'Age')
@@ -135,5 +207,13 @@ if __name__ == '__main__':
     create_correlation_scatter(pdf, 'Value in Mil', 'BMI')
     create_correlation_scatter(pdf, 'Value in Mil', 'Wage in K')
     create_correlation_scatter(pdf, 'Value in Mil', 'Release Clause in Mil')
+    big_histogram(pdf)
 
+    # Vector assembler
+    input_cols = ['Age', 'Overall', 'Potential', 'Special', 'BMI', 'Year',
+                  'Wage in K', 'Release Clause in Mil', 'Preferred Foot_']
+    output_col = 'features'
+    feature_df = vector_assembler(df4, input_cols, output_col)
+    new_df = feature_df.select('features', "Value in Mil").withColumnRenamed("Value in Mil", 'label')
 
+    linear_regression(new_df)
