@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Player Information</title>
+</head>
+<style>
+		body {
+			background-color: lightgreen;
+			height: 100%;
+            margin: 0;
+		}
+	</style>
+<body>
+    <div style="text-align:left;">
+        <a href="/" style="color:blue; text-decoration:none; font-size:14px;">Go Home</a>
+	</div>
+	<h1>FIFA Player Information</h1>
+	<form action="/game" method="POST">
+		<label for="player_name">Enter Player Name:</label>
+		<input type="text" name="player_name" id="player_name" required>
+		<input type="submit" value="Submit">
+	</form>
+
+	{% if player_info_list %}
+		<h2>Player Information:</h2>
+		{% for player_info in player_info_list %}
+			<p>Name: {{ player_info['name'] }}</p>
+			<p>Club: {{ player_info['club'] }}</p>
+			<p>Age: {{ player_info['age'] }}</p>
+			<p>Value: {{ player_info['value'] }}</p>
+			<hr>
+		{% endfor %}
+	{% elif player_name %}
+		<p>No player information found for {{ player_name }}</p>
+	{% endif %}
+
+</body>
+</html>

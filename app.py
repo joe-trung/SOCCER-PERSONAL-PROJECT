@@ -1,3 +1,4 @@
+import pandas as pd
 from flask import Flask, render_template, request, flash
 import boto3
 import time
@@ -89,6 +90,36 @@ else:
 
     # Wait for table to be created
     table.meta.client.get_waiter('table_exists').wait(TableName=table_name)
+
+
+# THIS CODE FOR THE GAME
+# Load player data from 2023 CSV file
+player_data = pd.read_csv("raw_data/FIFA23_official_data.csv")
+
+
+@app.route("/game", methods=["GET", "POST"])
+def game():
+    player_name = None
+    player_info_list = []
+
+    if request.method == "POST":
+        player_name = request.form["player_name"]
+
+        # Retrieve player information from player_data DataFrame
+        player_info_df = player_data.loc[player_data["Name"].str.lower().str.contains(player_name.lower())]
+
+        if not player_info_df.empty:
+            for _, row in player_info_df.iterrows():
+                player_info = {
+                    "name": row["Name"],
+                    "club": row["Club"],
+                    "age": row["Age"],
+                    "value": row["Value"]
+                }
+                player_info_list.append(player_info)
+
+    return render_template("game.html", player_name=player_name, player_info_list=player_info_list)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
