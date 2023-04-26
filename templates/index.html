@@ -1,90 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>TRUNG TRAN - PASSION PROJECT</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-	<!-- jQuery library -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<!-- Popper JS -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-	<!-- Bootstrap JS -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-	<style>
-		body {
-			background-color: lightgreen;
-			height: 100%;
-            margin: 0;
-		}
-		.img-fluid {
-			height: 100%;
-			width: 100%;
-		}
-		footer {
-          position: absolute;
-          bottom: 0;
-          width: 100%;
-          height: 50px;
-          line-height: 50px;
-          background-color: #343a40;
-          color: white;
-        }
-	</style>
-</head>
-<body>
-	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-		<a class="navbar-brand" href="#">DATA TRANSFORMING - DATA VISUALIZATION - MACHINE LEARNING</a>
-		<ul class="navbar-nav">
-			<li class="nav-item">
-				<a class="nav-link" href="#">Home</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#">Project Documentation</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#">About Trung's Passion</a>
-			</li>
-		</ul>
-	</nav>
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-sm-3">
-				<img class="img-fluid" src="https://soccerpassionproject.s3.amazonaws.com/plot/top50_value_wage.png">
-			</div>
-			<div class="col-sm-6">
-				<h1>Explore the data</h1>
-                <h4>Introduction here...</h4>
-				<ul>
-					<hr>
-					<li><a href="#">Check out the data visualization library</a></li>
-					<hr>
-					<li><a href="#">Explore the prediction model</a></li>
-					<hr>
-					<li><a href="#">Enter a play's name - Get the value</a></li>
-					<hr>
-					<li><a href="#">AWS migration vs Localhost</a></li>
-					<hr>
-					<li><a href="#">Comments and suggestions</a></li>
-				</ul>
-			</div>
-			<div class="col-sm-3">
-				<img class="img-fluid" src="https://soccerpassionproject.s3.amazonaws.com/plot/radar_plot.png">
-			</div>
-		</div>
-	</div>
-      <footer class="bg-dark text-white mt-3 py-2">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <p>April 2023  --  Trung Tran  --  Zip Code Wilmington.</p>
-                </div>
-                <div class="col-md-6 text-md-right">
-                    <p>PASSION PROJECT | SOCCER PLAYERS VALUATION MODELS</p>
-                </div>
-            </div>
-        </div>
-    </footer>
-</body>
-</html>
+{% extends 'layout.html' %}
+
+{% block body %}
+<h1>Explore the data</h1>
+<h4>Introduction here...</h4>
+<ul>
+    <hr>
+    <li><a href="#">Check out the data visualization library</a></li>
+    <hr>
+    <li><a href="#">Explore the prediction model</a></li>
+    <hr>
+    <li><a href="#">Enter a play's name - Get the value</a></li>
+    <hr>
+    <li><a href="#">AWS migration vs Localhost</a></li>
+    <hr>
+    <li><a href="/comment">Comments and suggestions</a></li>
+</ul>
+{% endblock %}

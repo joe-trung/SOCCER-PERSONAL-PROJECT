@@ -26,7 +26,7 @@ def get_soccer_data(api_key):
     players = json.loads(data_str)["response"]
 
     # Save the fixtures data to a JSON file
-    with open("soccer_players.json", "w") as f:
+    with open("json/soccer_players.json", "w") as f:
         json.dump(players, f)
 
 
