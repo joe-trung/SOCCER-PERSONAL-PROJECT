@@ -12,6 +12,9 @@
 		}
 	</style>
 <body>
+    <div style="text-align:left;">
+        <a href="/" style="color:blue; text-decoration:none; font-size:14px;">Go Home</a>
+    </div>
     <h1>Soccer Player Valuation and Prediction Project</h1>
     <div style="overflow:auto;">
         <div style="float:left; width:50%;">
@@ -36,24 +39,24 @@
                   <li>Amazon Kubernetes Services (AKS)</li>
               </ul>
           </div>
-          <h2>Data Pipeline</h2>
+          <h3>Data Pipeline</h3>
           <p>The data pipeline starts with collecting data from the API-Football.com API using a Python script with the
             Requests library. Since free subscriptions have limited downloads, the dataset was downloaded from Kaggle
             and uploaded to Amazon S3. The data was then transformed using Pandas and NumPy, and stored back in Amazon S3.</p>
-          <h2>Data Visualization</h2>
+          <h3>Data Visualization</h3>
           <p>The data was visualized using Matplotlib and Seaborn libraries. Various visualizations were created,
             such as bar charts, box plots, and line plots. A radar plot was also created using Matplotlib to visualize
             the average values of some player attributes like age, overall, potential, value, and wage. All files were
             saved on Amazon S3.</p>
-          <h2>Machine Learning</h2>
+          <h3>Machine Learning</h3>
           <p>PySpark was used to apply linear regression, random forest, and decision tree models to find the best fit.
             Further data cleaning and tuning was done to reevaluate the models.</p>
 
-          <h2>Web Application</h2>
+          <h3>Web Application</h3>
           <p>A Flask web application was built with a user interface hosted on AWS. The website provides information
             about the project, and allows users to access data visualizations. A little game was also added where users
             can enter a player's name and get the player's value. The data collected from the website is stored in DynamoDB.</p>
-          <h2>Docker and AKS</h2>
+          <h3>Docker and AKS</h3>
           <p>The application was packaged with Docker to allow for easy deployment and portability. Amazon Kubernetes
             Services (AKS) was used to deploy, scale, and manage the containerized application.</p>
         </div>

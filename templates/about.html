@@ -1,10 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "layout.html" %}
 
-</body>
-</html>
+{% block body %}
+<div style="background-color: lightgreen;">
+    <h2>About Trung Tran's Passion Project</h2>
+    <p><img src="https://soccerpassionproject.s3.amazonaws.com/documentation/Trung+Tran.jpg"
+            alt="Trung Tran" style="float:left;margin-right:10px;width:200px;height:200px;">
+        Trung Tran has been a small business owner who has been running his own companies for more than 10 years.
+      He has gained many valuable skills such as planning, teamwork, and time management, which have helped him
+      to become a successful entrepreneur. Despite his success, he has always had a passion for technology,
+      especially in the area of data engineering and data science. This led him to enroll in Zip Code Wilmington
+      to become a data engineer.</p>
+    <p>One of Trung's special interests is soccer, which he has been involved in since he was very young. While
+      he no longer plays the sport, he still follows all the major events and would love to work on more projects
+      related to soccer in the future. However, he found that available data on soccer was very limited and often
+      costly, and API calls did not provide him with enough data. Luckily, he discovered some useful datasets on
+      FIFA and Kaggle.</p>
+    <p>Trung's passion for soccer and data science led him to embark on a passion project. He wanted to use his
+      skills to show what he could do and to explore his interest in soccer in more depth. He decided to create
+      a web application that would predict a player's market value based on various factors such as age,
+      position, and performance. To do this, he used Python, Pandas, PySpark, Matplotlib, and Seaborn to
+      process the data and fit the prediction models.</p>
+    <p>One of the unique features of Trung's project is that he was able to use AWS services to create a
+      cloud-based application. He recognized that the world is moving towards cloud computing, and companies
+      are starting to migrate to serverless architectures. He saw this as an opportunity to showcase his skills
+      and create a project that was relevant to the current trends in technology. By using AWS services, he was
+      able to make his project more efficient and cost-effective.</p>
+    <p>On the front-end, Trung created a website to link and visualize all the data. The website provides
+      information about his project, including the data sources and methodology used to make the predictions.
+      He also included a little game to help people learn more about the dataset and how he processed the
+      data.</p>
+    <p>Trung's passion project is not just about his love for soccer; it is also about demonstrating his
+      skills and showcasing what he can do. His project is a testament to his dedication to learning new
+      things and his willingness to explore his interests in more depth. Trung's project is a great example
+      of how technology can be used to explore and analyze data, and how passion can drive innovation.</p>
+    <a href="/">Go back to home page</a>
+</div>
+
+{% endblock %}

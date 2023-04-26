@@ -21,6 +21,11 @@ def documentation():
     return render_template('documentation.html')
 
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+
 @app.route('/comment', methods=['GET'])
 def comment():
     return render_template('comment.html')

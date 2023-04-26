@@ -45,22 +45,30 @@
 				<a class="nav-link" href="/documentation">Project Documentation</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="#">About Trung's Passion</a>
+				<a class="nav-link" href="/about">About Trung's Passion</a>
 			</li>
 		</ul>
 	</nav>
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-sm-3">
-				<h6 style="text-align: center;color:yellow;">Wage and Value Correlation</h6>
-				<img class="img-fluid" src="https://soccerpassionproject.s3.amazonaws.com/plot/top50_value_wage.png">
+			<div class="col-sm-3 sidenav">
+				<div class="well">
+					<img class="img-fluid" src="https://soccerpassionproject.s3.amazonaws.com/plot/top50_value_wage.png">
+				</div>
+				<div class="well">
+					<h6 style="text-align: center;color:yellow;">Wage and Value Correlation</h6>
+				</div>
 			</div>
 			<div class="col-sm-6">
 			{% block body %} {% endblock %}
 			</div>
-			<div class="col-sm-3">
-				<h6 style="text-align: center; color:yellow;">Radar Plot Representing Leonel Messi</h6>
-				<img class="img-fluid" src="https://soccerpassionproject.s3.amazonaws.com/plot/radar_plot.png">
+			<div class="col-sm-3 sidenav">
+				<div class="well">
+					<img class="img-fluid" src="https://soccerpassionproject.s3.amazonaws.com/plot/top50_value_age.png">
+				</div>
+				<div class="well">
+					<h6 style="text-align: center; color:yellow;">Radar Plot Representing Leonel Messi</h6>
+				</div>
 			</div>
 		</div>
 	</div>
