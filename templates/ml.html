@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+	<h1>Machine Learning Report</h1>
+	<table>
+		<tr>
+			<th>Model</th>
+			<th>R2 Score</th>
+			<th>Description</th>
+		</tr>
+		<tr>
+			<td>Linear Regression</td>
+			<td>0.988</td>
+			<td>A simple linear regression model using one feature.</td>
+		</tr>
+		<tr>
+			<td>Random Forest</td>
+			<td>0.958</td>
+			<td>An ensemble model using decision trees with random subsets of features.</td>
+		</tr>
+		<tr>
+			<td>Decision Tree</td>
+			<td>0.944</td>
+			<td>A deep learning model with several layers of neurons.</td>
+		</tr>
+	</table>
+	<hr>
+	<p>Based on the R-squared values obtained for the linear regression, random forest, and decision tree models,
+	it can be observed that the linear regression model performed the best, with an R-squared value of 0.988.
+	This suggests that the linear regression model can explain 98.8% of the variance in the dependent variable,
+	which is a very strong result.</p>
+
+	<p>The random forest model also performed well, with an R-squared value of 0.958, suggesting that the model can
+	explain 95.8% of the variance in the dependent variable. This result is also strong, but slightly lower
+	than the linear regression model.</p>
+
+	<p>The decision tree model had an R-squared value of 0.944, indicating that the model can explain 94.4%
+	of the variance in the dependent variable. This is a respectable result, but still lower than both the linear
+	regression and random forest models.</p>
+	<hr>
+     <br><img src="https://soccerpassionproject.s3.amazonaws.com/ml_models/table.png" alt="ML MODELS R2" class="photo" width="600" height="400">
+{% endblock %}

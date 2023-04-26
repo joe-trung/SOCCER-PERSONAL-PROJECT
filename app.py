@@ -26,6 +26,11 @@ def about():
     return render_template('about.html')
 
 
+@app.route('/ml')
+def ml():
+    return render_template('ml.html')
+
+
 @app.route('/comment', methods=['GET'])
 def comment():
     return render_template('comment.html')
