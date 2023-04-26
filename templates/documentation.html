@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project Documentation</title>
+</head>
+<style>
+		body {
+			background-color: lightgreen;
+			height: 100%;
+            margin: 0;
+		}
+	</style>
+<body>
+    <h1>Soccer Player Valuation and Prediction Project</h1>
+    <div style="overflow:auto;">
+        <div style="float:left; width:50%;">
+            <p>This project uses various technologies to collect, transform, and analyze soccer player data, and build
+              a web application for users to interact with the data. The following are the important
+              technologies used:</p>
+          <div style="display:flex;">
+              <ul style="list-style:none; margin-right:20px;">
+                  <li>API-Football.com API</li>
+                  <li>Python</li>
+                  <li>Pandas</li>
+                  <li>NumPy</li>
+                  <li>Matplotlib</li>
+                  <li>Seaborn</li>
+              </ul>
+              <ul style="list-style:none;">
+                  <li>PySpark</li>
+                  <li>Flask</li>
+                  <li>DynamoDB</li>
+                  <li>Docker</li>
+                  <li>Amazon S3</li>
+                  <li>Amazon Kubernetes Services (AKS)</li>
+              </ul>
+          </div>
+          <h2>Data Pipeline</h2>
+          <p>The data pipeline starts with collecting data from the API-Football.com API using a Python script with the
+            Requests library. Since free subscriptions have limited downloads, the dataset was downloaded from Kaggle
+            and uploaded to Amazon S3. The data was then transformed using Pandas and NumPy, and stored back in Amazon S3.</p>
+          <h2>Data Visualization</h2>
+          <p>The data was visualized using Matplotlib and Seaborn libraries. Various visualizations were created,
+            such as bar charts, box plots, and line plots. A radar plot was also created using Matplotlib to visualize
+            the average values of some player attributes like age, overall, potential, value, and wage. All files were
+            saved on Amazon S3.</p>
+          <h2>Machine Learning</h2>
+          <p>PySpark was used to apply linear regression, random forest, and decision tree models to find the best fit.
+            Further data cleaning and tuning was done to reevaluate the models.</p>
+
+          <h2>Web Application</h2>
+          <p>A Flask web application was built with a user interface hosted on AWS. The website provides information
+            about the project, and allows users to access data visualizations. A little game was also added where users
+            can enter a player's name and get the player's value. The data collected from the website is stored in DynamoDB.</p>
+          <h2>Docker and AKS</h2>
+          <p>The application was packaged with Docker to allow for easy deployment and portability. Amazon Kubernetes
+            Services (AKS) was used to deploy, scale, and manage the containerized application.</p>
+        </div>
+        <div style="float:right; width:50%;">
+            <a href="https://soccerpassionproject.s3.amazonaws.com/documentation/personal_project_uml.png"><img
+                    src="https://soccerpassionproject.s3.amazonaws.com/documentation/personal_project_uml.png"
+                    alt="UML diagram"></a>
+                      <br><br><br>
+            <div style="text-align:center;">
+                <a href="/" style="color:red; font-weight:bold; text-decoration:none; font-size:24px;">Go Home</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

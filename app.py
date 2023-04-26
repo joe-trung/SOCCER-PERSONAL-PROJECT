@@ -2,13 +2,23 @@ from flask import Flask, render_template, request, flash
 import boto3
 import time
 
-
 app = Flask(__name__)
 app.secret_key = 'TRUNG TRAN'
+
 
 @app.route("/")
 def index():
     return render_template("index.html")
+
+
+@app.route('/visualize')
+def visualize():
+    return render_template('visualize.html')
+
+
+@app.route('/documentation')
+def documentation():
+    return render_template('documentation.html')
 
 
 @app.route('/comment', methods=['GET'])
@@ -31,6 +41,7 @@ def add_comment():
     )
     flash('Thank you for your comment! It was saved on DynamoDB')
     return render_template('comment.html')
+
 
 # COMMAND IN CLI TO DOWNLOAD FROM DYNAMODB
 # aws dynamodb scan --table-name comments --output json --query "Items[*]" > json/comments.json
@@ -68,8 +79,6 @@ else:
 
     # Wait for table to be created
     table.meta.client.get_waiter('table_exists').wait(TableName=table_name)
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)
