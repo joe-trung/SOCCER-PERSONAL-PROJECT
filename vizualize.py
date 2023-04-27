@@ -27,7 +27,7 @@ def plot_top_n_players(data, column, n=10):
     # plt.close()
 
     # Connect to S3
-    s3 = boto3.resource('s3')
+    s3 = boto3.resource('s3', region_name='us-east-1')
 
     # Save the plot as a PNG file in memory
     png_buffer = BytesIO()
@@ -64,7 +64,7 @@ def plot_boxplot(data, column):
     # plt.close()
 
     # Connect to S3
-    s3 = boto3.resource('s3')
+    s3 = boto3.resource('s3', region_name='us-east-1')
 
     # Save the plot as a PNG file in memory
     png_buffer = BytesIO()
@@ -91,7 +91,7 @@ def save_lineplot(data, x_col, y_col, output_filename):
     # plt.close()
 
     # Connect to S3
-    s3 = boto3.resource('s3')
+    s3 = boto3.resource('s3', region_name='us-east-1')
 
     # Save the plot as a PNG file in memory
     png_buffer = BytesIO()
@@ -143,7 +143,7 @@ def plot_radar(dataset):
     # fig.savefig("Plot/radar_plot.png")
 
     # Connect to S3
-    s3 = boto3.resource('s3')
+    s3 = boto3.resource('s3', region_name='us-east-1')
 
     # Save the plot as a PNG file in memory
     png_buffer = BytesIO()

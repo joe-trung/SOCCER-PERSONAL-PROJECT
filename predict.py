@@ -64,7 +64,7 @@ def create_heatmap_plot(panda_df):
     ax = sns.heatmap(corr, annot=True, cmap="coolwarm")
 
     # Connect to S3
-    s3 = boto3.resource('s3')
+    s3 = boto3.resource('s3', region_name='us-east-1')
 
     # Save the plot as a PNG file in memory
     png_buffer = BytesIO()
@@ -92,7 +92,7 @@ def create_correlation_scatter(panda_df, column1, column2):
     ax.set_ylabel(y_col)
 
     # Connect to S3
-    s3 = boto3.resource('s3')
+    s3 = boto3.resource('s3', region_name='us-east-1')
 
     # Save the plot as a PNG file in memory
     png_buffer = BytesIO()
@@ -133,7 +133,7 @@ def big_histogram(df):
     fig.tight_layout()
 
     # Connect to S3
-    s3 = boto3.resource('s3')
+    s3 = boto3.resource('s3', region_name='us-east-1')
 
     # Save the plot as a PNG file in memory
     png_buffer = BytesIO()
@@ -290,5 +290,5 @@ if __name__ == '__main__':
     r2_forest = random_forest_regression(new_df)
     print("R2 Score from random forest regression: ", r2_forest)
 
-    s3 = boto3.client('s3')
+    s3 = boto3.client('s3', region_name='us-east-1')
     save_data_to_s3(r2_linear, r2_decision, r2_forest)

@@ -114,7 +114,7 @@ if __name__ == "__main__":
     # preprocessed_data.to_csv('processed_data/fifa_data.csv')
 
     # Save the processed data to an S3 bucket
-    s3 = boto3.resource('s3')
+    s3 = boto3.resource('s3', region_name='us-east-1')
     bucket_name = 'soccerpassionproject'
     # Convert the DataFrame to CSV format
     csv_buffer = preprocessed_data.to_csv(index=False).encode()

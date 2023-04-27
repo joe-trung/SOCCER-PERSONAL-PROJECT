@@ -58,7 +58,7 @@ def add_comment():
 # aws dynamodb scan --table-name comments --output json --query "Items[*]" > json/comments.json
 
 
-dynamodb = boto3.resource('dynamodb')
+dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
 
 table_name = 'comments'
 
@@ -122,4 +122,4 @@ def game():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=False)
