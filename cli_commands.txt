@@ -25,3 +25,6 @@
 #
 #     Download Auth config map:
 #     curl -o aws-auth-cm.yaml https://soccerpassionproject.s3.amazonaws.com/EKS+kubernetes+files/aws-auth-cm.yaml
+#
+#     CONFIG EKS
+#     aws eks --region us-east-1 update-kubeconfig --name passion-app

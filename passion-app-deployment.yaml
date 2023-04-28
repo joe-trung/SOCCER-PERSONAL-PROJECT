@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: passion-app-deployment
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: passion-app
@@ -13,7 +13,7 @@ spec:
         app: passion-app
     spec:
       containers:
-        - name: passion-app-container
+        - name: passion-app
           image: public.ecr.aws/f9g5b7l3/passion-app:latest
           ports:
-            - containerPort: 80
+            - containerPort: 8080
