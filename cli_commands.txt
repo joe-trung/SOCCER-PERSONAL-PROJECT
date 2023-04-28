@@ -15,4 +15,13 @@
 #     aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/f9g5b7l3
 #     docker tag passion-app:latest public.ecr.aws/f9g5b7l3/passion-app:latest
 #     docker push public.ecr.aws/f9g5b7l3/passion-app:latest
-
+#
+# EKS IN AWS
+#     Eks vpc template url:
+#     https://soccerpassionproject.s3.amazonaws.com/EKS+kubernetes+files/amazon-eks-vpc-private-subnets.yaml
+#
+#     Eks nodegroup template:
+#     https://soccerpassionproject.s3.amazonaws.com/EKS+kubernetes+files/amazon-eks-nodegroup.yaml
+#
+#     Download Auth config map:
+#     curl -o aws-auth-cm.yaml https://soccerpassionproject.s3.amazonaws.com/EKS+kubernetes+files/aws-auth-cm.yaml
