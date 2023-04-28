@@ -1,14 +1,17 @@
-Docker Commands
-    docker run -it <image-name>
-    docker run -it -e AWS_ACCESS_KEY_ID=<access-key-id> -e AWS_SECRET_ACCESS_KEY=<secret-access-key>
-                    -e AWS_REGION=<region> <image-name>
-
-Kubernetes deployment and service:
-    kubectl apply -f passion-app-deployment.yaml
-    kubectl apply -f passion-app-service.yaml
-
-Docker rregistry push
-    aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/f9g5b7l3
-    docker tag passion-app:latest public.ecr.aws/f9g5b7l3/passion-app:latest
-    docker push public.ecr.aws/f9g5b7l3/passion-app:latest
+# COMMAND IN CLI TO DOWNLOAD FROM DYNAMODB
+#     aws dynamodb scan --table-name comments --output json --query "Items[*]" > json/comments.json
+#
+# Docker Commands
+#     docker run -it <image-name>
+#     docker run -it -e AWS_ACCESS_KEY_ID=<access-key-id> -e AWS_SECRET_ACCESS_KEY=<secret-access-key>
+#                     -e AWS_REGION=<region> <image-name>
+#
+# Kubernetes deployment and service:
+#     kubectl apply -f passion-app-deployment.yaml
+#     kubectl apply -f passion-app-service.yaml
+#
+# Docker rregistry push
+#     aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/f9g5b7l3
+#     docker tag passion-app:latest public.ecr.aws/f9g5b7l3/passion-app:latest
+#     docker push public.ecr.aws/f9g5b7l3/passion-app:latest
 
