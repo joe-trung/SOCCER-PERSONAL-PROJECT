@@ -2,6 +2,7 @@
 #     aws dynamodb scan --table-name comments --output json --query "Items[*]" > json/comments.json
 #
 # Docker Commands
+#     docker build --tag passion-app .
 #     docker run -it <image-name>
 #     docker run -it -e AWS_ACCESS_KEY_ID=<access-key-id> -e AWS_SECRET_ACCESS_KEY=<secret-access-key>
 #                     -e AWS_REGION=<region> <image-name>
