@@ -91,7 +91,6 @@ else:
     # Wait for table to be created
     table.meta.client.get_waiter('table_exists').wait(TableName=table_name)
 
-
 # THIS CODE FOR THE GAME
 # Load player data from 2023 CSV file
 player_data = pd.read_csv("raw_data/FIFA23_official_data.csv")

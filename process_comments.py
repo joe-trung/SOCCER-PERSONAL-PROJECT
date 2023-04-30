@@ -3,12 +3,13 @@ from collections import Counter
 import matplotlib.pyplot as plt
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
+from wordcloud import WordCloud
 
 # Set up DynamoDB client
 dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
 
 # Get table
-table = dynamodb.Table('your_table_name')
+table = dynamodb.Table('comments')
 
 # Get all comments
 response = table.scan()
@@ -18,7 +19,8 @@ comments = [item['comment'] for item in response['Items']]
 stop_words = set(stopwords.words('english'))
 
 # Define punctuation to exclude
-punctuation = set(['.', ',', ';', ':', '?', '!', '-', '(', ')'])
+others = set(['.', ',', ';', ':', '?', '!', '-', '(', ')', 'project', 'comment', 'work', 'see', 'put'])
+
 
 # Function to clean and tokenize text
 def clean_text(text):
@@ -27,10 +29,11 @@ def clean_text(text):
     # Tokenize text
     tokens = word_tokenize(text)
     # Remove stop words and punctuation
-    tokens = [token for token in tokens if not token in stop_words and not token in punctuation]
+    tokens = [token for token in tokens if not token in stop_words and not token in others]
     # Remove any non-alphabetic characters
     tokens = [token for token in tokens if token.isalpha()]
     return tokens
+
 
 # Clean and tokenize all comments
 all_tokens = []
@@ -38,14 +41,13 @@ for comment in comments:
     tokens = clean_text(comment)
     all_tokens.extend(tokens)
 
-# Get the most common words
-word_counts = Counter(all_tokens)
-top_words = word_counts.most_common(10)
+# Create word cloud
+wordcloud = WordCloud(width=800, height=800, background_color='white', min_font_size=10).generate_from_frequencies(
+    Counter(all_tokens))
 
-# Plot the most common words
-labels, values = zip(*top_words)
-plt.bar(labels, values)
-plt.title('Most Common Words')
-plt.xlabel('Word')
-plt.ylabel('Count')
-plt.show()
+# Display the generated image:
+plt.figure(figsize=(8, 8), facecolor=None)
+plt.imshow(wordcloud)
+plt.axis("off")
+plt.tight_layout(pad=0)
+plt.savefig("Plot/feeback.png")

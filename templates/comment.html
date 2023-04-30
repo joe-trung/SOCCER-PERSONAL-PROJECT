@@ -12,6 +12,17 @@
     <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
+  <hr>
+  <button type="button" class="btn btn-secondary" id="generate-report-btn">Generate Report</button>
+        <script>
+        document.getElementById('generate-report-btn').addEventListener('click', function() {
+          var img = document.createElement('img');
+          img.src = 'https://soccerpassionproject.s3.amazonaws.com/plot/feeback.png';
+          var newWindow = window.open();
+          newWindow.document.write(img.outerHTML);
+        });
+      </script>
+  <hr>
 </form>
 
 {% with messages = get_flashed_messages() %}
@@ -23,5 +34,6 @@
     </ul>
   {% endif %}
 {% endwith %}
+
 
 {% endblock %}
